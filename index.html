@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #1f1f1f;
+      color: azure;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 64px);
+    }
+    .cell {
+      border: 1px solid teal;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+    }
+    .reset-btn {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Tic-Tac-Toe</h1>
+    <p class="player-turn"></p>
+    <p class="winner-display"></p>
+    <div class="board">
+      <!-- rows are a, b, c
+      columns are x, y, z
+      so the position of 1st cell would be a,x and so on -->
+      <!-- a,x a,y a,z - b,x b,y b,z - c,x c,y c,z -->
+      <div class="cell a-x" id="1"></div>
+      <div class="cell a-y" id="2"></div>
+      <div class="cell a-z" id="3"></div>
+      <div class="cell b-x" id="4"></div>
+      <div class="cell b-y" id="5"></div>
+      <div class="cell b-z" id="6"></div>
+      <div class="cell c-x" id="7"></div>
+      <div class="cell c-y" id="8"></div>
+      <div class="cell c-z" id="9"></div>
+    </div>
+    <button class="reset-btn">Reset Game</button>
+  </div>
+
+  <script>
+    const container = document.querySelector(".board")
+    const cell1 = document.querySelector(".a-x")
+    const cell2 = document.querySelector(".a-y")
+    const cell3 = document.querySelector(".a-z")
+    const cell4 = document.querySelector(".b-x")
+    const cell5 = document.querySelector(".b-y")
+    const cell6 = document.querySelector(".b-z")
+    const cell7 = document.querySelector(".c-x")
+    const cell8 = document.querySelector(".c-y")
+    const cell9 = document.querySelector(".c-z")
+    const displayWinner = document.querySelector(".winner-display")
+    const displayPlayerTurn = document.querySelector(".player-turn")
+    const resetBtn = document.querySelector(".reset-btn")
+
+    let turn = 1;
+    let player = 0;  //0 for ⭕ and 1 for ❌
+    let win = false;
+    let displayTurn = () => {
+      displayPlayerTurn.textContent = `Turn: ${player === 0 ? "⭕" : "❌"}`
+    }
+    displayTurn();
+    
+
+    container.addEventListener("click", (e) => {
+      const clickedCell = e.target
+      if (clickedCell.classList.contains('cell')) {
+        if(player === 0) {
+          if(clickedCell.textContent !== "") return
+          if (win) return
+          clickedCell.textContent = "⭕"
+          player = 1;
+          turn += 1
+          displayTurn();
+          winningAlgo()
+          
+        } else {
+          if(clickedCell.textContent !== "") return
+          if (win) return
+          clickedCell.textContent = "❌"
+          player = 0;
+          turn +=1
+          displayTurn();
+          winningAlgo()
+        }       
+      }
+    })
+
+    let ClosingGameWhenWinOrLose = (argument) => {
+      displayWinOrDraw(argument)
+      displayPlayerTurn.textContent = "";
+      win = true;
+    }
+
+    let displayWinOrDraw = (argument) => {
+      if (argument === 'win') {
+       displayWinner.textContent =  `${player === 0 ? "❌" : "⭕"} ${argument}`
+      } else {
+        displayWinner.textContent = argument
+      }
+    }
+
+    //winning logic
+    let winningAlgo = () => {
+      let playerInputInCell1 = cell1.textContent
+      let playerInputInCell2 = cell2.textContent
+      let playerInputInCell3 = cell3.textContent
+      let playerInputInCell4 = cell4.textContent
+      let playerInputInCell5 = cell5.textContent
+      let playerInputInCell6 = cell6.textContent
+      let playerInputInCell7 = cell7.textContent
+      let playerInputInCell8 = cell8.textContent
+      let playerInputInCell9 = cell9.textContent
+      //according to my calculation possible combination of winning is 8
+      if ( playerInputInCell1 &&
+        playerInputInCell1 === playerInputInCell2 && playerInputInCell2 === playerInputInCell3 
+      ) {
+        ClosingGameWhenWinOrLose('win');
+      } 
+      else if( playerInputInCell4 &&
+        playerInputInCell4 === playerInputInCell5 && playerInputInCell5 === playerInputInCell6
+      ) {
+        ClosingGameWhenWinOrLose('win');
+      }
+      else if( playerInputInCell7 &&
+        playerInputInCell7 === playerInputInCell8 && playerInputInCell8 ===  playerInputInCell9
+      ) {
+        ClosingGameWhenWinOrLose('win');
+      }
+      else if( playerInputInCell1 &&
+        playerInputInCell1 === playerInputInCell4 && playerInputInCell4 === playerInputInCell7
+      ) {
+        ClosingGameWhenWinOrLose('win');
+      }
+      else if( playerInputInCell2 &&
+        playerInputInCell2 === playerInputInCell5 && playerInputInCell5 === playerInputInCell8
+      ) {
+       ClosingGameWhenWinOrLose('win');
+      }
+      else if( playerInputInCell3 &&
+        playerInputInCell3 === playerInputInCell6 && playerInputInCell6 === playerInputInCell9
+      ) {
+        ClosingGameWhenWinOrLose('win');
+      }
+      else if( playerInputInCell3 &&
+        playerInputInCell3 === playerInputInCell5 && playerInputInCell5 === playerInputInCell7
+      ) {
+        ClosingGameWhenWinOrLose('win');
+      }
+      else if( playerInputInCell1 &&
+        playerInputInCell1 === playerInputInCell5 && playerInputInCell5 === playerInputInCell9
+      ) {
+        console.log("someone Win")
+      } else if (turn > 9) {
+        ClosingGameWhenWinOrLose('draw');
+      }
+    }
+
+    let resetGame = () => {
+      turn = 1
+      player = 0;
+      win = false
+      displayWinner.textContent = ""
+      const cell = document.querySelectorAll(".cell")
+      cell.forEach((cell) => cell.textContent = "")
+      displayTurn()
+    }
+    resetBtn.addEventListener("click", resetGame)
+
+
+  </script>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
